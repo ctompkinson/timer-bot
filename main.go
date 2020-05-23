@@ -144,7 +144,8 @@ func setCommand(s *discordgo.Session, m *discordgo.MessageCreate, timer *Timer) 
 		}
 	}
 
-	s.ChannelMessageEdit(m.ChannelID, timer.Message.ID, fmt.Sprintf("@everyone %s is over!", timer.TimerName))
+	s.ChannelMessageDelete(m.ChannelID, timer.Message.ID)
+	s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("@everyone %s is over!", timer.TimerName))
 	delete(Timers[m.ChannelID], timer.TimerName)
 	return
 }
@@ -163,12 +164,16 @@ func cancelCommand(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	id := strings.Join(parts[2:], " ")
 	if Timers[m.GuildID] == nil {
-		s.ChannelMessageSend(m.ChannelID, "Timer does not exist")
+		if _, err := s.ChannelMessageSend(m.ChannelID, "Timer does not exist"); err != nil {
+			fmt.Println(err)
+		}
 		return
 	}
 
 	if Timers[m.GuildID][id] == nil {
-		s.ChannelMessageSend(m.ChannelID, "Timer does not exist")
+		if _, err := s.ChannelMessageSend(m.ChannelID, "Timer does not exist"); err != nil {
+			fmt.Println(err)
+		}
 		return
 	}
 
