@@ -164,10 +164,12 @@ func cancelCommand(s *discordgo.Session, m *discordgo.MessageCreate) {
 	id := strings.Join(parts[2:], " ")
 	if Timers[m.GuildID] == nil {
 		s.ChannelMessageSend(m.ChannelID, "Timer does not exist")
+		return
 	}
 
 	if Timers[m.GuildID][id] == nil {
 		s.ChannelMessageSend(m.ChannelID, "Timer does not exist")
+		return
 	}
 
 	Timers[m.GuildID][id].Stop <- true
