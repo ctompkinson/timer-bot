@@ -145,7 +145,7 @@ func setCommand(s *discordgo.Session, m *discordgo.MessageCreate, timer *Timer) 
 	}
 
 	s.ChannelMessageDelete(m.ChannelID, timer.Message.ID)
-	s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s is over! @Team1 @Team2 @Team3 @Team4 @Team5 @Team6 @Team7 @Team8", timer.TimerName))
+	s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s is over! @everyone", timer.TimerName))
 	delete(Timers[m.ChannelID], timer.TimerName)
 	return
 }
